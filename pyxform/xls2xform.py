@@ -8,6 +8,7 @@ import json
 import logging
 import os
 from os.path import splitext
+from datetime import datetime
 
 from pyxform import builder, xls2json
 from pyxform.utils import has_external_choices, sheet_to_csv
@@ -16,6 +17,13 @@ from pyxform.validators.odk_validate import ODKValidateError
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.StreamHandler())
 logger.setLevel(logging.INFO)
+
+
+# Custom encoder for datetime objects
+def datetime_encoder(o):
+    if isinstance(o, datetime):
+        return o.isoformat()
+    raise TypeError("Object of type '%s' is not JSON serializable" % type(o).__name__)
 
 
 def get_xml_path(path):
@@ -34,6 +42,10 @@ def xls2xform_convert(
     warnings = []
 
     json_survey = xls2json.parse_file_to_json(xlsform_path, warnings=warnings)
+
+    with open(xform_path + '.json_survey.json', 'w', encoding='utf-8') as f:
+        json.dump(json_survey, f, indent=4, ensure_ascii=False, default=datetime_encoder)
+
     survey = builder.create_survey_element_from_dict(json_survey)
     # Setting validate to false will cause the form not to be processed by
     # ODK Validate.

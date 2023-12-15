@@ -1,3 +1,20 @@
+================
+AccessRC pyxform
+================
+
+This repository is forked from the original pyxform library at ( https://github.com/XLSForm/pyxform ).
+
+It includes changes specific to AccessRC form specification and example forms.
+
+After installing pyxform with one of the methods below use the following command ::
+
+ python pyxform/xls2xform.py --json examples/accessrc-xlsform-example.xlsx
+
+This will output two files:
+
+- accessrc-xlsform-example.xml (XML file compatible with any ODK server)
+- accessrc-xlsform-example.xml.json_survey.json (JSON compatible with AccessRC Application)
+
 ========
 pyxform
 ========
